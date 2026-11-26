@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>이거 제 이모지야 🌍</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#FFF8EC; --card:#FFFFFF; --ink:#2B2340; --sub:#6B6385; --line:#EADFCB;
@@ -162,9 +162,435 @@ h1,h2,h3{font-family:var(--display);font-weight:400;margin:0}
 
 .burst{position:fixed;pointer-events:none;font-family:var(--emoji);font-size:42px;z-index:99;animation:fly 1.3s ease-out forwards}
 @keyframes fly{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+/* Shared classroom layout. The themed controls retain the original game states. */
+html { background: var(--page); }
+body { background: var(--wall,var(--page)); color:var(--ink); word-break:keep-all; overflow-wrap:break-word; }
+#app { width:min(94%,1480px); max-width:none; padding:clamp(16px,2.1vw,34px) 0 36px; }
+:root { --card:#fffdf6; --bg:var(--page); --line:var(--edge); --ok:#136947; --warn:#ac233f; --ok-soft:#dcf3d8; --body:"Malgun Gothic",sans-serif; }
+button { touch-action:manipulation; }
+button:focus-visible,[tabindex]:focus-visible { outline:4px solid #0966c2; outline-offset:4px; }
+.top { gap:12px; min-height:52px; }
+.brand { display:inline-flex; align-items:center; gap:9px; font:900 clamp(18px,1.9vw,28px)/1 var(--display); letter-spacing:-.035em; }
+.brand svg { width:36px; height:36px; }
+.intro-board { position:relative; }
+.cover { position:relative; }
+.cover-art { pointer-events:none; }
+.cover h1 { position:relative; z-index:1; font-size:clamp(64px,6.3vw,104px); line-height:1.06; letter-spacing:-.067em; font-weight:900; }
+.cover h1 span.row { display:block; }
+.cover-copy { position:relative; z-index:1; min-width:0; }
+.greet { font-family:var(--display); font-size:clamp(18px,1.65vw,28px); }
+.edition { display:inline-flex; align-items:center; gap:.4em; font-family:var(--display); }
+.mode-title { display:flex; align-items:center; gap:14px; margin:clamp(20px,2vw,34px) 0 14px; font:400 clamp(24px,2.1vw,32px)/1.2 var(--display); }
+.mode-title::after { content:""; flex:1; border-top:2px solid var(--edge); }
+.modes { grid-template-columns:repeat(2,minmax(0,1fr)); margin:0; gap:clamp(14px,1.7vw,26px); }
+.mode { position:relative; min-width:0; display:flex; flex-direction:column; align-items:stretch; padding:clamp(19px,1.9vw,30px); color:var(--ink); background:var(--surface); border:var(--stroke) solid var(--edge); border-radius:var(--radius); box-shadow:var(--shadow); font-family:var(--body); }
+.mode:hover { transform:translateY(-3px); }
+.mode-head { display:flex; align-items:center; gap:14px; margin-bottom:12px; }
+.mode-art { width:clamp(50px,4.8vw,70px); aspect-ratio:1; flex:none; display:grid; place-items:center; }
+.mode-art svg { width:90%; height:90%; }
+.mode-no { display:block; font:800 12px/1.4 Consolas,monospace; letter-spacing:.09em; }
+.mode h2 { margin:3px 0 0; font-size:clamp(23px,2.35vw,37px); line-height:1.17; font-weight:var(--title-weight,400); letter-spacing:-.045em; }
+.mode p { font-size:clamp(16px,1.14vw,21px); color:var(--ink); line-height:1.5; margin:0; }
+.mode .example { color:var(--ink); font-size:clamp(15px,1.05vw,19px); line-height:1.45; margin-top:14px; padding:9px 12px; }
+.mode-foot { margin-top:auto; padding-top:2px; }
+.open-arrow { margin-left:auto; display:grid; place-items:center; min-width:38px; height:38px; font:700 25px/1 Arial,sans-serif; border:2px solid var(--edge); border-radius:50%; }
+.tip { margin-top:22px; padding:13px 18px; font-size:clamp(15px,1.05vw,19px); color:var(--ink); background:var(--card); border:2px dashed var(--edge); }
+.btn,.choice,.tab,.pill,.style,.ebtn { border:var(--stroke) solid var(--edge); border-radius:var(--button-radius); }
+.btn,.btn.primary,.btn.orange,.btn.ok,.choice,.choice.right,.pill,.style,.tab { box-shadow:var(--control-shadow); }
+.btn { min-height:50px; line-height:1.2; }
+.btn.small { min-height:44px; min-width:46px; font-size:clamp(16px,1.15vw,21px); border-radius:var(--button-radius); }
+.btn.primary,.pill.on,.tab.on { background:var(--accent); color:#fff; }
+.btn.orange { background:var(--action); color:var(--action-ink); }
+.btn.ok,.choice.right { background:var(--ok); color:white; }
+.btn:disabled { opacity:.58; }
+.panel,.stage,.palette { border:var(--stroke) solid var(--edge); border-radius:var(--radius); box-shadow:var(--shadow); }
+.panel { max-width:920px; }
+.panel h2,.turn-title { line-height:1.25; }
+.panel .desc,.rules,.style small,.hint .why,.discuss div { font-size:clamp(17px,1.25vw,22px); }
+.pill,.tab,.style { background:var(--control); }
+.pill.on,.tab.on { border-color:var(--ink); }
+.style.on { background:var(--orange-soft); box-shadow:inset 0 0 0 3px var(--orange); }
+.tab { font-size:clamp(16px,1.12vw,21px); min-height:44px; border-width:2px; padding:7px 12px; }
+.pill { min-height:46px; }
+.top:not(.intro-top) { padding:10px 14px; background:var(--bar); border:var(--stroke) solid var(--edge); border-radius:var(--radius); }
+.progress { color:var(--ink); font-size:clamp(20px,1.65vw,28px); }
+.chip,.rank,.btn.teambtn { color:#191a24; }
+.chip { border:2px solid var(--edge); }
+.rank { border:2px solid var(--edge); flex-wrap:wrap; }
+.rank .s.emo { line-height:1.35; }
+.bubble,.hint,.hint.open,.slot,.secret,.rank,.rules,.discuss div { border-radius:var(--radius); }
+.mascot { animation:none; }
+.bubble { max-width:100%; }
+.hint { background:var(--control); border-color:var(--muted-edge); }
+.hint .q { color:var(--muted-edge); }
+.hint .lab,.cat h3 { color:var(--ink); font-size:clamp(18px,1.4vw,24px); }
+.hint.open { background:var(--card); border-color:var(--accent); }
+.choices { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); }
+.choice { color:var(--ink); padding:14px 10px; }
+.choice.wrong { background:#e5e3e7; color:#5b5561; }
+.controls .kbd { opacity:.9; }
+.compose { grid-template-columns:minmax(320px,32%) minmax(0,1fr); }
+.side,.palette { min-width:0; }
+.side .stage>div:first-child { font-size:clamp(24px,2.1vw,34px)!important; }
+.side .stage>div:last-child { font-size:clamp(15px,1.1vw,20px)!important; }
+.tabs { gap:8px; padding-bottom:12px; }
+.cat { padding-top:8px; }
+.ebtn { background:var(--control); border-width:1px; border-color:var(--muted-edge); }
+.ebtn.used { background:var(--accent-soft); border:3px solid var(--accent); }
+.slot { min-width:0; border-color:var(--muted-edge); }
+.secret { border:var(--stroke) solid var(--edge); }
+.secret.mini { min-height:52px; align-content:center; }
+.tip b,.mode b { font-weight:800; }
+@media(min-width:1500px) {
+ .hint { min-height:240px; } .stage { padding:40px; } .ebtn { width:68px; height:68px; }
+ .panel h2 { font-size:46px; } .opt label,.pill { font-size:26px; }
+}
+@media(max-width:900px) {
+ .compose { grid-template-columns:1fr; } .side { position:static; } .tabs { position:static; }
+ .mode-head { gap:9px; }.mode .open-arrow { min-width:32px; height:32px; }
+}
+@media(max-width:720px) {
+ #app { width:calc(100% - 26px); padding-top:14px; }
+ .modes { grid-template-columns:1fr; } .top { gap:8px; } .top:not(.intro-top) { padding:8px; }
+ .panel,.stage,.palette { padding:16px; } .panel h2 { font-size:30px; }
+ .choices { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+ .choice { font-size:22px; } .controls .btn { padding:12px 15px; } .hints { gap:9px; }
+ .hint { min-height:112px; padding:12px; gap:3px; } .hint .q { font-size:42px; }
+ .speaker { gap:6px; } .mascot { font-size:52px; } .bubble { font-size:28px; padding:12px 14px; }
+ .bubble::before { display:none; } .discuss { grid-template-columns:1fr; }
+ .brand svg { width:29px; height:29px; } .brand { gap:5px; } .slot { border-width:2px; }
+ .rank { font-size:23px; padding:12px; gap:6px; } .secret { padding:22px 15px; } .secret .reveal { overflow-wrap:anywhere; }
+}
+@media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important; } .burst { display:none; } }
+
+@media(max-width:560px) {
+ .tabs {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;}
+ .tab {padding:5px 2px;font-size:15px;}
+}
+
+body:not(:has(.stage .banner,.podium)) .burst { display:none; }
+
+:root {
+ --page:#c8b3ef; --ink:#252660; --edge:#292768; --sub:#4a466a; --muted-edge:#817b9f;
+ --accent:#3d3ba4; --orange:#933956; --accent-soft:#ddd9ff; --orange-soft:#ffe0e4; --action:#ffc3cc; --action-ink:var(--ink);
+ --bar:#ade7f0; --surface:#ffe2ea; --control:#f4efff; --radius:19px; --button-radius:13px; --stroke:2.5px; --shadow:0 5px 0 var(--edge); --control-shadow:0 3px 0 var(--edge);
+ --display:"Jua","Malgun Gothic",sans-serif; --body:"Gowun Dodum","Malgun Gothic",sans-serif;
+}
+body { background-color:var(--page); background-image:linear-gradient(#eee5ff66 1px,transparent 1px),linear-gradient(90deg,#eee5ff66 1px,transparent 1px);background-size:34px 34px; }
+.intro-top { margin:0 0 16px; }
+.brand svg { background:#fff77b; border:2px solid var(--edge); border-radius:50%; transform:rotate(-12deg); }
+.intro-board { border:3px solid var(--edge); border-radius:22px; overflow:hidden; background:var(--card); box-shadow:0 6px 0 var(--edge); }
+.chrome { position:relative; display:flex; justify-content:space-between; align-items:center; min-height:38px; padding:0 17px; border-bottom:2.5px solid var(--edge); background:#acf0ec; }
+.chrome-label { position:absolute; left:50%; transform:translateX(-50%); font:700 13px/1.1 Consolas,monospace; letter-spacing:.055em; white-space:nowrap; }
+.lights { display:flex; gap:5px; }.lights i { width:12px;height:12px;border-radius:50%;border:1.8px solid var(--edge);background:#ff969f; }.lights i:nth-child(2){background:#ffda55}.lights i:nth-child(3){background:#96d878}
+.window-mark { font:900 19px/1 monospace; }
+.intro-board .cover { display:flex; align-items:center; min-height:clamp(286px,23vw,360px); isolation:isolate; overflow:hidden; padding:24px 7% 30px;
+ background:radial-gradient(circle,#8cd4dc 1px,transparent 1.7px) 0 0 / 16px 16px,#c8f0f1; }
+.town { position:absolute; bottom:-2px;left:0;width:100%;height:36%; }
+.cover-art { position:absolute; bottom:0; right:2%; width:47%; height:99%; display:grid;place-items:center; }
+.feature-art { width:100%;height:100%; }
+.cover-copy { width:55%; }
+.greet { display:inline-block; background:#fffdf2; padding:4px 16px; border-radius:999px 999px 999px 0; border:2px solid var(--edge); transform:rotate(-3deg); margin-bottom:9px; }
+.intro-board .cover h1 { font-family:"Bagel Fat One",var(--display); font-weight:400; letter-spacing:-.035em; line-height:1.05; }
+.intro-board .cover h1 .row { display:inline-block!important; white-space:nowrap; }
+.edition { background:#ffdf6e; border:2px solid var(--edge); border-radius:24px; padding:3px 12px; margin-top:12px; font-size:18px; transform:rotate(-2deg); }
+.ribbon { border-top:2.5px solid var(--edge); background:#ffb8cc; overflow:hidden; font-family:var(--display); }
+.ribbon-track,.ribbon-run { display:flex; width:max-content; }.ribbon-run { align-items:center; }
+.ribbon-track { animation:parade 58s linear infinite; }.ribbon-run span { white-space:nowrap; padding:5px 17px; font-size:17px; }.ribbon-run b { font-size:16px; }
+@keyframes parade { to { transform:translateX(-50%); } }
+.mode-title::before { content:"✿"; color:#ff9bb4; font-size:1.35em; line-height:1; -webkit-text-stroke:1.4px var(--edge); }
+.mode:first-child { background:#fff0b4; }.mode:last-child { background:#fbd1de; }
+.mode-art { border:2px solid var(--edge); border-radius:17px; background:#bde7e3; transform:rotate(-4deg); }.mode:last-child .mode-art { background:#e2d6ff;transform:rotate(4deg); }
+.open-arrow { background:#fffdf1; }.mode .example { border:1.5px dashed var(--edge); background:#fffbed!important; border-radius:10px; }
+.tip { border-radius:13px; background:#fff9e8; }
+.hint.open { background:#fff6cf; }.hint.open:nth-child(2) { background:#e5f6e3; }.hint.open:nth-child(3){background:#fce8f1}
+.top:not(.intro-top) { border-radius:18px 18px 8px 8px; }
+@media(max-width:720px) {
+ .intro-board .cover { padding:17px 17px 25px; min-height:230px; }.cover-copy { width:68%; }
+ .intro-board .cover h1 { font-size:clamp(43px,9.5vw,62px); }.intro-board .cover h1 .row { display:block!important; }
+ .cover-art { right:-5%; width:49%; height:80%; bottom:4%; }
+ .chrome { min-height:30px;padding:0 10px; }.chrome-label { font-size:11px; }.lights i { width:9px;height:9px; }
+ .edition { font-size:15px;margin-top:8px; }.greet { font-size:16px;padding:4px 10px; }
+ .ribbon-run span { font-size:14px; padding:5px 12px; }.intro-board { border-radius:15px; }
+}
+
+.town-logo { display:block; width:min(100%,440px); height:auto; overflow:visible; }
+.intro-board .cover { padding-top:18px; padding-bottom:20px; }
+.greet { margin-bottom:6px; }
+.edition { margin-top:0; }
+.mode h2,.brand { font-weight:700; }
+.top:not(.intro-top)::before { content:""; width:48px; height:15px; flex:none; background:radial-gradient(circle at 7px 50%,#ff929a 4px,var(--edge) 4.5px 5.5px,transparent 6px),radial-gradient(circle at 22px 50%,#ffdb63 4px,var(--edge) 4.5px 5.5px,transparent 6px),radial-gradient(circle at 37px 50%,#86d798 4px,var(--edge) 4.5px 5.5px,transparent 6px); }
+@media(max-width:720px) { .top:not(.intro-top)::before{display:none}.town-logo{width:100%;}.intro-board .cover-art{right:-5%;width:46%}.intro-board .cover-copy{width:62%;} }
+
+.brand { font-family:'Bagel Fat One',var(--display); font-weight:400; }
+
+/* 키드타운 게임 창. 인트로는 선택한 시안의 크기와 배치를 유지한다. */
+.art-library { position:absolute; pointer-events:none; }
+#app:has(> .top:not(.intro-top)) {
+  --navy:#292768; --cream:#fffdf3; --mint:#a6e9d5; --pink:#ffc3d5; --sun:#ffdc76; --sky:#b3e5f4;
+  --bubble-font:"Bagel Fat One","Jua","휴먼둥근헤드라인","Malgun Gothic",sans-serif;
+  --rim:3px; --pad:clamp(18px,1.6vw,32px); --rail:clamp(32px,3.7vh,42px);
+  --lift:4px 5px 0 var(--navy); --gap:clamp(12px,1.65vh,22px);
+  width:min(94%,1840px); padding:clamp(12px,1.9vh,24px) 0 clamp(18px,2vh,26px);
+}
+.top:not(.intro-top) {
+  border:0; border-bottom:2px solid var(--navy); border-radius:0;
+  padding:0 0 10px; margin:0 0 var(--gap); background:transparent;
+}
+.top:not(.intro-top)::before { display:none; }
+.progress:not(:empty),.chip { background:var(--cream); border:2px solid var(--navy); padding:5px 16px; border-radius:30px; }
+.chip.active { outline-width:2px; }
+#app:has(> .stage) { min-height:100svh; display:flex; flex-direction:column; }
+#app:has(.stage,.podium) { position:relative; z-index:1; }
+.burst { z-index:0; }
+.stage,.panel,.palette,.hero:has(+ .podium) {
+  --caption:"이모지 지리 게임"; --rail-color:var(--mint);
+  position:relative; isolation:isolate; border:var(--rim) solid var(--navy);
+  border-radius:18px; box-shadow:var(--lift); background-color:var(--cream);
+  padding:calc(var(--rail) + var(--pad)) var(--pad) var(--pad);
+}
+.stage::before,.panel::before,.palette::before,.hero:has(+ .podium)::before {
+  content:var(--caption); position:absolute; inset:0 0 auto; height:var(--rail); box-sizing:border-box;
+  pointer-events:none; border-radius:14px 14px 0 0; border-bottom:var(--rim) solid var(--navy);
+  display:grid; place-items:center; color:var(--navy); font:700 clamp(14px,1vw,19px)/1 var(--body); letter-spacing:.05em;
+  background:
+    radial-gradient(circle at 18px 50%,#ff919f 4px,var(--navy) 4.5px 6px,transparent 6.5px),
+    radial-gradient(circle at 36px 50%,#ffdb67 4px,var(--navy) 4.5px 6px,transparent 6.5px),
+    radial-gradient(circle at 54px 50%,#83d5a1 4px,var(--navy) 4.5px 6px,transparent 6.5px),
+    var(--rail-color);
+}
+.stage::after,.panel::after,.palette::after,.hero:has(+ .podium)::after {
+  content:"✧"; position:absolute; top:0; right:15px; height:var(--rail);
+  display:grid; align-items:center; font:900 23px/1 Georgia,serif; pointer-events:none;
+}
+#app > .stage { flex:1; min-width:0; display:flex; flex-direction:column; gap:var(--gap); }
+.top:not(.intro-top) .btn,.controls .btn,.side .btn,.pill,.tab {
+  border:2px solid var(--navy); box-shadow:2px 3px 0 var(--navy); font-weight:700;
+}
+.controls { margin-top:var(--gap); }
+.controls .btn,.side .btn {
+  font-size:clamp(19px,1.65vw,32px); padding:clamp(10px,1.35vh,17px) clamp(18px,2vw,38px);
+  min-height:48px; border:var(--rim) solid var(--navy); border-radius:18px; box-shadow:3px 4px 0 var(--navy);
+}
+.controls .btn.orange,.side .btn.orange { background:var(--pink); }
+.controls .btn.ok { background:var(--mint); color:var(--navy); }
+.controls .kbd { display:inline-block; padding:3px 5px; border:1px solid currentColor; border-radius:5px; font:600 .52em/1.15 Consolas,monospace; vertical-align:middle; }
+.controls .btn:active:not(:disabled),.choice:active:not(:disabled),.pill:active,.tab:active { transform:translate(2px,2px); box-shadow:1px 1px var(--navy); }
+
+/* 설정 */
+.panel { --caption:"게임 설정"; max-width:1160px; margin:0 auto; }
+.panel h2,.turn-title,.hero:has(+ .podium) h1 { font:400 clamp(32px,3.4vw,66px)/1.18 var(--bubble-font); letter-spacing:-.04em; }
+.panel .desc { margin:8px 0 16px; color:var(--ink); }
+.panel .opt { padding-top:12px; margin:12px 0; border-top:2px dashed #b9abc9; }
+.opt label { font-size:clamp(21px,1.55vw,30px); font-weight:700; }
+.pill,.tab { background:#fcf7e8; }
+.pill.on,.tab.on { background:var(--navy); color:white; }
+.style,.style.on { border:var(--rim) solid var(--navy); box-shadow:2px 3px var(--navy); background:#f5f0fa; }
+.style.on { background:var(--sun); }
+.style { position:relative; padding-right:42px; }
+.style::after { content:""; position:absolute; right:14px; top:14px; width:19px; height:19px; border:2px solid var(--navy); border-radius:50%; background:white; }
+.style.on::after { content:"✓"; text-align:center; background:var(--navy); color:white; font:700 15px/19px sans-serif; }
+.style b { font-weight:700; }
+.rules { background:#e0f4e9; border:2px solid var(--navy); color:var(--ink); }
+.panel .controls { justify-content:flex-end; }
+@media(min-width:850px) {
+  .panel:has(.styles) { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); column-gap:18px; }
+  .panel:has(.styles) > :is(h2,.desc,.opt:has(.styles),.rules,.controls) { grid-column:1/-1; }
+  .panel:has(.styles) .opt { margin:4px 0; }
+  .panel .style { display:grid; grid-template-columns:auto 1fr; gap:4px 16px; }
+  .panel .style .emo { grid-row:span 2; align-self:center; }
+  .panel .opt .pills { gap:8px; }
+  .panel .opt .pill { padding:8px 14px; }
+}
+
+/* 말풍선과 힌트 무대 */
+.stage:has(.hints) { --caption:"이모지 자기소개 퀴즈"; }
+.speaker {
+  flex:0 0 auto; flex-wrap:nowrap; padding:clamp(8px,1.2vh,16px) 2%; gap:clamp(12px,2vw,40px);
+  background:radial-gradient(circle,#8fd1d7 1.2px,transparent 1.5px) 0 0/14px 14px,#d6f3f1;
+  border:2px solid var(--navy); border-radius:14px;
+}
+.town-host { width:clamp(110px,15vw,282px); height:clamp(94px,15vh,175px); flex:none; }
+.bubble {
+  background:#fffdf5; border:var(--rim) solid var(--navy); box-shadow:var(--lift); border-radius:24px 26px 24px 5px;
+  font:400 clamp(30px,min(3.4vw,6.8vh),70px)/1.18 var(--bubble-font); letter-spacing:-.045em; padding:.17em .5em .22em;
+}
+.bubble { -webkit-text-stroke:.018em currentColor; }
+.bubble small { -webkit-text-stroke:0; }
+.bubble::before {
+  content:""; display:block; left:-.19em; top:52%; width:.31em; height:.31em; margin:0;
+  background:#fffdf5; border:0; border-bottom:var(--rim) solid var(--navy); border-left:var(--rim) solid var(--navy);
+  transform:rotate(45deg);
+}
+.bubble .name { color:var(--navy); background:var(--sun); border-radius:10px; padding:0 .15em; }
+.bubble .name.hidden { background:var(--navy); color:#fff4a4; letter-spacing:.04em; }
+.bubble small { color:#883959; font:700 .46em/1.3 var(--display); letter-spacing:0; }
+.hints { flex:1; margin:0; gap:clamp(10px,1.35vw,26px); grid-template-columns:repeat(3,minmax(0,1fr)); }
+.hint,.hint.open {
+  --tile:#ffe59a; min-height:0; min-width:0; border:var(--rim) solid var(--navy); border-radius:16px;
+  box-shadow:3px 4px var(--navy); padding:clamp(10px,1.25vw,22px); gap:clamp(6px,1.1vh,14px);
+  background:repeating-linear-gradient(-45deg,transparent 0 9px,#ffffff66 9px 11px),color-mix(in srgb,var(--tile) 52%,white);
+}
+.hint:nth-child(2) { --tile:#acf0d9; }
+.hint:nth-child(3) { --tile:#ffcbdc; }
+.hints .hint.open { background:var(--tile); }
+.hint .lab,.big-emojis .t,.cat h3 {
+  border:2px solid var(--navy); border-radius:999px; background:var(--cream);
+  color:var(--navy); font:700 clamp(16px,1.22vw,25px)/1.16 var(--display); padding:.23em .7em;
+}
+.hint { container-type:inline-size; }
+.hint .e { font-size:min(24cqi,11.6vh,134px); line-height:1.16; white-space:nowrap; }
+.hint .q { display:grid; place-items:center; font:400 clamp(48px,7vw,116px)/1 var(--bubble-font); color:var(--navy); }
+.hint .why { font:600 clamp(17px,1.25vw,25px)/1.45 var(--body); border-radius:9px; background:#fff9; padding:.35em .55em; }
+@media(min-width:721px) {
+  /* 세 카드의 라벨·이모지·해설이 같은 기준선에서 읽히도록 행을 공유한다. */
+  .hints { grid-template-rows:1fr auto auto 1fr; row-gap:0; }
+  .hints:has(.why) { grid-template-rows:1fr auto auto auto 1fr; }
+  .hints .hint { display:grid; grid-row:1/-1; grid-template-rows:subgrid; row-gap:clamp(4px,.7vh,8px); justify-items:center; justify-content:stretch; }
+  .hint .lab { grid-row:2; }.hint :is(.e,.q) { grid-row:3; }.hint .why { grid-row:4; align-self:start; }
+}
+.choices { margin:0; gap:clamp(10px,1vw,20px); }
+.choice {
+  font:700 clamp(23px,2.1vw,42px)/1.17 var(--display); border:var(--rim) solid var(--navy);
+  border-radius:24px; box-shadow:var(--lift); padding:.47em .25em; background:#f2e6ff;
+}
+.choice:not(:disabled):hover { background:#e8d1ff; }
+.choice.right { background:#adedd0; color:#133f38; box-shadow:var(--lift); }
+.choice.right::before { content:"✓ "; }
+.stage .banner,.discuss,.stage .big-emojis,.timer,.timer-num { margin:0; }
+.banner { border-radius:12px; border:2px solid var(--navy); padding:.24em .45em; font:700 clamp(20px,1.8vw,36px)/1.3 var(--display); background:#fff0b3; }
+.stage:has(.name.pop) { --rail-color:var(--pink); }
+.stage:has(.name.pop) .banner::before,.stage:has(.name.pop) .banner::after { content:"✦"; display:inline-block; color:#965032; margin:0 .55em; }
+
+/* 나라 카드, 이모지 작업대, 맞히기와 해명 */
+.stage:has(> .secret) { --caption:"비밀 나라 카드"; align-items:center; justify-content:center;
+  background:radial-gradient(circle,#e9d9aa 1px,transparent 1.6px) 0 0/17px 17px,#fff8df; }
+.turn-sub { font-size:clamp(19px,1.65vw,32px); margin:0; }
+.secret:not(.mini) { width:min(100%,850px); max-width:none; min-height:clamp(175px,28vh,320px); margin:2vh auto; display:grid; place-items:center;
+  background:repeating-linear-gradient(135deg,transparent 0 12px,#ffffff0b 12px 15px),#353374;
+  border:7px double #fff0af; outline:3px solid var(--navy); box-shadow:6px 8px 0 var(--navy);
+  font-size:clamp(24px,2.35vw,45px); cursor:pointer; }
+.secret.peek { background:#393675; }
+.secret .reveal { font-family:var(--bubble-font); }
+.turn-title span[style],.banner span[style],.hero h1 span[style^="color:#"] { -webkit-text-fill-color:var(--navy); border-bottom:.1em solid currentColor; }
+.compose { grid-template-columns:minmax(310px,31%) minmax(0,1fr); gap:clamp(16px,1.9vw,36px); }
+.side { position:sticky; top:12px; gap:14px; z-index:3; }
+.side .stage { --caption:"내 이모지"; --rail-color:var(--pink); padding:calc(var(--rail) + var(--pad)) var(--pad) var(--pad)!important; }
+.side .stage > div:first-child { font-family:var(--bubble-font)!important; }
+.slot { aspect-ratio:1; border:2px dashed #5f597d; background:#f4eafa; border-radius:12px; }
+.slot.filled { border:2px solid var(--navy); background:#ffe398; box-shadow:1px 2px var(--navy); }
+.side .secret { background:var(--navy); }
+.palette { --caption:"이모지 팔레트"; --rail-color:var(--sky); }
+.palette .tabs { top:0; background:var(--cream); }
+.cat { margin:14px 0 20px; }
+.cat h3 { display:inline-block; background:var(--sun); margin-bottom:10px; }
+.cat:nth-child(3n) h3 { background:var(--mint); }
+.cat:nth-child(3n + 1) h3 { background:var(--pink); }
+.ebtn { border:1.5px solid #938ca8; border-radius:12px; background:#faf4ff; }
+.ebtn:hover { background:var(--sky); }.ebtn.used { background:var(--sun); border-color:var(--navy); }
+.stage:has(.timer) { --caption:"이모지로 나라 맞히기"; --rail-color:var(--sky); }
+.stage:has(.discuss) { --caption:"정답 공개"; }
+.stage .big-emojis { flex:1; align-items:center; align-content:center; gap:clamp(10px,1.5vw,28px); }
+.big-emojis .cell {
+  min-width:0; padding:clamp(12px,2.5vh,32px); background:#ffe59a; border:var(--rim) solid var(--navy);
+  border-radius:18%; box-shadow:var(--lift);
+}
+.big-emojis .cell:nth-child(3n+2) { background:var(--mint); }.big-emojis .cell:nth-child(3n) { background:var(--pink); }
+.big-emojis .e { font-size:clamp(58px,min(8vw,15vh),160px); }
+.timer { flex:none; height:clamp(24px,3.3vh,38px); border:var(--rim) solid var(--navy); background:#ede6fb; box-shadow:2px 3px var(--navy); }
+.timer div { background:repeating-linear-gradient(120deg,#ffaabc 0 15px,#ffdc83 15px 30px); border-right:3px solid var(--navy); }
+.timer-num { align-self:center; padding:0 .55em; border-radius:24px; background:var(--navy); color:white; font:700 clamp(24px,2.1vw,42px)/1.3 var(--display); }
+.timer-num.up { background:#9b2645; color:white; }
+.discuss { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.discuss div { border:2px solid var(--navy); font-size:clamp(17px,1.25vw,25px); line-height:1.45; }
+.discuss b { font-family:var(--display); font-size:1.16em; }
+
+/* 결과판 */
+.hero:has(+ .podium) { --caption:"게임 결과"; --rail-color:var(--sun); padding:calc(var(--rail) + 1.7vh) 16px calc(2vh + 18px)!important;
+  background:
+    linear-gradient(var(--navy),var(--navy)) left bottom 16px/100% 2px no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='16' viewBox='0 0 72 16'%3E%3Cpath fill='%23ffc3d5' d='M0 0h72v16H0z'/%3E%3Cpath fill='%23292768' d='m15 1 2 5 5 2-5 2-2 5-2-5-5-2 5-2z'/%3E%3Ccircle cx='50' cy='8' r='3' fill='%23ffdc76' stroke='%23292768'/%3E%3C/svg%3E") left bottom/72px 16px repeat-x,
+    radial-gradient(circle,#e1b2c3 1px,transparent 1.7px) 0 0/15px 15px,#ffe2ec; }
+.hero:has(+ .podium) .big { font-size:clamp(52px,7vh,86px); }
+.hero:has(+ .podium) .big::before,.hero:has(+ .podium) .big::after { content:"✦"; font:.5em/1 Georgia,serif; vertical-align:middle; color:var(--sun); -webkit-text-stroke:1.5px var(--navy); margin:0 .65em; }
+.hero:has(+ .podium) p { font-size:clamp(18px,1.6vw,31px); color:#73314d; }
+.podium { width:min(100%,1450px); max-width:none!important; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); margin:var(--gap) auto; }
+.rank { border:2px solid var(--navy); font-weight:700; box-shadow:2px 3px var(--navy)!important; }
+.rank:has(.s.emo) { background:#fff1c6!important; }
+.rank:nth-child(4n+2):has(.s.emo),.rank:nth-child(4n+3):has(.s.emo) { background:#d6f2e8!important; }
+.podium:has(.m) { max-width:800px!important; grid-template-columns:1fr; }
+@media(min-width:1000px) {
+  #app:has(> .podium) { height:100svh; display:flex; flex-direction:column; }
+  #app:has(> .podium) > :not(.podium) { flex-shrink:0; }
+  .podium { min-height:0; overflow-y:auto; grid-auto-rows:max-content; padding:3px 6px 7px 3px; }
+  .rank:has(.s.emo) { min-height:clamp(60px,7.8vh,90px); font-size:clamp(25px,1.85vw,36px)!important; }
+  .rank .s.emo { font-size:clamp(28px,2.15vw,42px)!important; }
+}
+@media(min-width:721px) and (max-height:820px) {
+  #app:has(> .top:not(.intro-top)) { --pad:16px; --gap:12px; --rail:30px; }
+  .town-host { height:100px; }.stage:has(.why,.discuss) .town-host { height:88px; }
+  .stage:has(.why) .hint .e { font-size:min(5.2vw,9vh); }
+  .stage:has(.why) .hint { padding:9px; gap:4px; }
+  .stage:has(.discuss) .big-emojis .e { font-size:10vh; }
+  .panel .desc,.panel .rules { margin:6px 0; }.panel .rules { padding:8px 14px; }
+  .panel .opt { padding-top:6px; }.panel .style { padding-top:9px; padding-bottom:9px; }
+}
+@media(max-width:850px) {
+  .compose { grid-template-columns:1fr; }
+  .side { top:0; gap:6px; padding:4px 2px 9px; background:var(--page); }
+  .side .stage { --rail:26px; --pad:10px; }
+  .side .stage > div:first-child { font-size:19px!important; }
+  .side .stage > div:first-child br { display:none; }
+  .side .stage > div:first-child span { margin-left:.35em; }
+  .side .slots { max-width:320px; margin:8px auto 0!important; }
+  .side .slot { height:44px; aspect-ratio:auto; }
+  .side .secret.mini { min-height:40px; padding:6px; }
+  .side .btn { min-height:44px; padding:6px; }
+  .palette .tabs { position:static; }
+}
+@media(max-width:720px) {
+  #app:has(> .top:not(.intro-top)) { --pad:12px; --gap:12px; --rim:2px; --rail:29px; width:calc(100% - 24px); }
+  .top:not(.intro-top) { gap:6px; padding:0 0 8px; }
+  .top:not(.intro-top) .btn.small { padding:6px 9px; }.progress:not(:empty) { padding:4px 8px; font-size:17px; }
+  .scores:not(:empty) { order:1; width:100%; gap:5px; }.chip { font-size:16px; padding:3px 8px; gap:4px; }.chip b { padding:0 6px; }
+  .side .stage > div:first-child br { display:inline; }
+  .side .stage > div:first-child span { margin:0; }
+  .stage::before,.panel::before,.palette::before,.hero:has(+ .podium)::before { font-size:13px; }
+  .speaker { gap:4px; padding:8px 5px; }
+  .town-host { width:48px; height:54px; }.bubble { min-width:0; font-size:clamp(20px,5.4vw,34px); padding:6px 8px; border-radius:14px 14px 14px 3px; box-shadow:2px 3px var(--navy); }
+  .bubble small { font-size:14px; }
+  .hints { grid-template-columns:1fr; gap:8px; }
+  .hint,.hint.open { flex-direction:row; flex-wrap:wrap; justify-content:space-between; gap:4px; min-height:64px; padding:8px 12px; }
+  .hint .e,.hint .q { font-size:40px; }.hint .why { width:100%; text-align:left; font-size:16px; }
+  .choice { font-size:20px; padding:10px 3px; border-radius:16px; }
+  .controls { gap:8px; }.controls .btn { padding:9px 12px; font-size:17px; }
+  .panel .controls { justify-content:center; }
+  .big-emojis .cell { padding:9px; }.big-emojis .e { font-size:48px; }.big-emojis .t { font-size:14px; padding:3px 5px; }
+  .discuss,.podium { grid-template-columns:1fr; }
+  .discuss div { padding:10px; }
+  .banner { font-size:18px; }.stage:has(.name.pop) .banner::before,.stage:has(.name.pop) .banner::after { margin:0 .15em; }
+  .rank:has(.s.emo) { font-size:19px!important; }.rank .s.emo { font-size:23px!important; }
+  .secret:not(.mini) { padding:22px 16px; }
+}
 </style>
 </head>
 <body>
+<svg class="art-library" width="0" height="0" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><symbol id="town-host" viewBox="0 0 420 282"><defs><clipPath id="host-landclip"><circle cx="205" cy="127" r="83"/></clipPath></defs>
+<path transform="translate(24 72) scale(1.25)" d="M0 18Q-4 8 8 7Q10-8 23 0Q31-5 38 6Q50 5 50 18Z" fill="#fffdf4" stroke="#262664" stroke-width="1.8"/><path transform="translate(330 30) scale(0.95)" d="M0 18Q-4 8 8 7Q10-8 23 0Q31-5 38 6Q50 5 50 18Z" fill="#fffdf4" stroke="#262664" stroke-width="1.8"/><path transform="translate(59 173) scale(0.85)" d="M0-20Q2-3 17-2Q5 1 1 20Q-2 4-17 1Q-4-3 0-20Z" fill="#ffe255" stroke="#262664" stroke-width="2.5"/><path transform="translate(347 130) scale(1.05)" d="M0-20Q2-3 17-2Q5 1 1 20Q-2 4-17 1Q-4-3 0-20Z" fill="#ffacd0" stroke="#262664" stroke-width="2.5"/><path transform="translate(303 46) scale(0.5)" d="M0-20Q2-3 17-2Q5 1 1 20Q-2 4-17 1Q-4-3 0-20Z" fill="#ffe255" stroke="#262664" stroke-width="2.5"/>
+<ellipse cx="220" cy="264" rx="110" ry="10" fill="#8178b8" opacity=".24"/>
+<g stroke="#262664" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+<g fill="none" stroke-width="9"><path d="M175 194Q182 216 161 230M226 198Q231 222 254 231M135 151Q100 170 81 153M281 136Q308 140 314 108"/></g>
+<g fill="#fffcdf"><path d="M93 156Q82 165 72 159Q59 155 60 143Q59 136 66 136Q61 120 69 122L79 136Q79 124 85 129L87 142Q98 136 98 144Z"/><path d="M305 111Q300 102 304 93Q307 87 311 95Q314 76 321 81L320 95Q330 79 335 86L327 100Q341 95 340 102Q332 117 319 119Z"/></g>
+<g fill="#ff928c"><path d="M163 221Q176 219 177 234L157 251Q135 260 119 249Q115 240 135 233L146 222Q152 216 157 225Z"/><path d="M244 224Q250 218 264 227Q282 224 292 238Q298 246 288 250L253 246Q240 241 240 233Z"/></g>
+<path d="M119 247Q137 258 159 245L176 230L180 238Q157 263 135 258Q123 257 119 253ZM240 236Q256 247 291 243L293 250Q269 256 242 244Z" fill="#fff9d8"/>
+<circle cx="205" cy="127" r="83" fill="#77d9f0"/>
+<g clip-path="url(#host-landclip)" fill="#90d376" stroke-width="2.4"><path d="M113 73Q139 63 151 69L160 81L185 76L191 86L176 96L178 109L162 120L162 139L150 138L139 121L118 121Z"/><path d="M160 144L179 149L188 161L176 176L169 193L163 190L164 173L154 160Z"/><path d="M204 43L221 37L253 46L250 60L234 60L227 74L210 75L209 62L196 64L191 52Z"/><path d="M263 82L290 77L300 159L277 158L257 149L250 132L258 120L250 110Z"/><path d="M230 183L249 171L265 179L263 194L237 202Z"/></g>
+<circle cx="205" cy="127" r="83" fill="none"/>
+<g fill="white"><ellipse cx="191" cy="123" rx="12" ry="18" transform="rotate(8 191 123)"/><ellipse cx="221" cy="121" rx="12" ry="18" transform="rotate(8 221 121)"/></g>
+<g fill="#262664" stroke="none"><ellipse cx="194" cy="128" rx="6" ry="9"/><ellipse cx="224" cy="126" rx="6" ry="9"/></g>
+<g fill="#ffa9bb" stroke="none"><ellipse cx="169" cy="143" rx="10" ry="5"/><ellipse cx="244" cy="137" rx="10" ry="5"/></g><path d="M194 147Q207 154 224 143Q221 166 209 164Q198 163 194 147Z" fill="#ff8f99"/>
+<g transform="rotate(-13 192 70)"><path d="M137 72Q135 27 178 23Q212 22 223 58L214 69Z" fill="#ffcd58"/><path d="M174 27Q161 46 166 67" fill="none" stroke-width="2.4"/><path d="M136 68Q183 57 223 57Q250 54 248 62Q244 70 215 73Q163 80 139 77Z" fill="#ffa4ba"/><ellipse cx="175" cy="22" rx="7" ry="4" fill="#ff909b"/></g>
+</g></symbol></svg>
 <div id="app"></div>
 <script>
 /* ================== 데이터 ================== */
@@ -258,29 +684,35 @@ function burst(){
 const VIEWS={};
 
 VIEWS.intro=()=>`
-  <div class="top"><div class="grow"></div><button class="btn small" onclick="fullscreen()">⛶ 전체화면</button></div>
-  <div class="hero">
-    <div class="big emo">💁🌍</div>
-    <h1>안녕~ <span class="blank">○○</span>입니다!</h1>
-    <p>이거 제 이모지야~ ✨ 나라 편</p>
-  </div>
-  <div class="modes">
-    <button class="mode" onclick="go('setup1')">
-      <div class="icon emo">🧩</div>
-      <h2>이모지 자기소개 퀴즈</h2>
-      <p>나라가 이모지로 자기소개를 해요. 힌트는 <b>자연환경 → 생활·산업 → 상징</b> 순서로 하나씩!</p>
+  <div class="top intro-top"><div class="brand"><svg aria-hidden="true" focusable="false" class="" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><g stroke="currentColor" stroke-width="2.4" fill="none"><circle cx="20" cy="20" r="15"/><ellipse cx="20" cy="20" rx="7" ry="15" transform="rotate(25 20 20)"/><path d="M6 14Q21 23 34 23M7 25Q20 30 29 32"/></g></svg><span>이모지 지리 게임</span></div><div class="grow"></div><button class="btn small" onclick="fullscreen()">⛶ 전체화면</button></div>
+  <div class="intro-board"><div class="chrome"><span class="lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="chrome-label">EMOJI TOWN</span><span class="window-mark" aria-hidden="true">✧</span></div><div class="cover"><svg aria-hidden="true" focusable="false" class="town" preserveAspectRatio="none" viewBox="0 0 1100 140" xmlns="http://www.w3.org/2000/svg"><g stroke="#262664" stroke-width="2.8" stroke-linejoin="round">
+<path d="M-30 124Q110 60 210 110T490 112T730 100Q910 24 1130 102V150H-30Z" fill="#a8dea6"/>
+<path d="M-40 135Q100 105 179 127Q270 142 395 115T700 120T970 90T1130 100V150H-40Z" fill="#6dc5a1"/>
+<g fill="#ffd871"><path d="M49 140V107H110V140"/><path d="M42 108L78 85L116 108Z" fill="#ffa4ab"/><path d="M69 131V114H82V131" fill="#bdeafb"/></g>
+<g transform="translate(945 48)"><path d="M0 100V22H88V100Z" fill="#ffb4be"/><path d="M-8 28L7 7H80L95 28Z" fill="#ffe973"/><path d="M-7 28H94V37Q87 44 79 37Q71 44 63 37Q55 44 47 37Q39 44 31 37Q23 44 15 37Q6 44-7 37Z" fill="#fff5cd"/><path d="M14 54H43V74H14Z" fill="#a4dff0"/><path d="M58 100V54H75V100" fill="#ac99df"/></g>
+<g fill="#67b589"><path d="M885 140V90M1070 130V78"/><path d="M862 96Q852 81 871 75Q867 52 887 55Q903 48 907 69Q927 81 908 94Z"/><path d="M1047 83Q1033 70 1052 62Q1048 41 1068 44Q1085 33 1089 57Q1109 69 1091 80Z"/></g>
+<path d="M0 137H1100" fill="none"/></g></svg><div class="cover-copy"><div class="greet">안녕~ <span>○○</span>입니다!</div><h1 aria-label="이거 제 이모지야~"><svg aria-hidden="true" focusable="false" class="town-logo" viewBox="-3 -3 315 153" xmlns="http://www.w3.org/2000/svg"><g transform="translate(4 5) rotate(-4 27 29)" stroke-linejoin="round" stroke-linecap="round"><path d="M29 31C29 51 7 52 7 31C7 10 29 10 29 31ZM46 8L46 53" transform="translate(0 1.6)" stroke="#292664" stroke-width="17" fill="none"/><path d="M29 31C29 51 7 52 7 31C7 10 29 10 29 31ZM46 8L46 53" stroke="#292664" stroke-width="16" fill="none"/><path d="M29 31C29 51 7 52 7 31C7 10 29 10 29 31ZM46 8L46 53" stroke="#ff9dc7" stroke-width="12.6" fill="none"/></g><g transform="translate(65 4) rotate(3 27 29)" stroke-linejoin="round" stroke-linecap="round"><path d="M6 13L29 12Q31 34 16 50M41 31L55 31M55 8L55 53" transform="translate(0 1.6)" stroke="#292664" stroke-width="17" fill="none"/><path d="M6 13L29 12Q31 34 16 50M41 31L55 31M55 8L55 53" stroke="#292664" stroke-width="16" fill="none"/><path d="M6 13L29 12Q31 34 16 50M41 31L55 31M55 8L55 53" stroke="#ffdc56" stroke-width="12.6" fill="none"/><g transform="translate(13 11)"><ellipse cx="0" cy="0" rx="3.5" ry="4.9" fill="#fff" stroke="#282563" stroke-width="1"/><ellipse cx="1" cy="1" rx="1.8" ry="2.4" fill="#282563"/></g><g transform="translate(21 11)"><ellipse cx="0" cy="0" rx="3.5" ry="4.9" fill="#fff" stroke="#282563" stroke-width="1"/><ellipse cx="1" cy="1" rx="1.8" ry="2.4" fill="#282563"/></g></g><g transform="translate(150 3) rotate(-3 27 29)" stroke-linejoin="round" stroke-linecap="round"><path d="M4 13H28Q25 33 6 48M19 32L30 46M36 29H44M44 8V52M59 7V54" transform="translate(0 1.6)" stroke="#292664" stroke-width="17" fill="none"/><path d="M4 13H28Q25 33 6 48M19 32L30 46M36 29H44M44 8V52M59 7V54" stroke="#292664" stroke-width="16" fill="none"/><path d="M4 13H28Q25 33 6 48M19 32L30 46M36 29H44M44 8V52M59 7V54" stroke="#83da9a" stroke-width="12.6" fill="none"/></g><g transform="translate(5 78) rotate(2 27 29)" stroke-linejoin="round" stroke-linecap="round"><path d="M29 31C29 51 7 52 7 31C7 10 29 10 29 31ZM46 8L46 53" transform="translate(0 1.6)" stroke="#292664" stroke-width="17" fill="none"/><path d="M29 31C29 51 7 52 7 31C7 10 29 10 29 31ZM46 8L46 53" stroke="#292664" stroke-width="16" fill="none"/><path d="M29 31C29 51 7 52 7 31C7 10 29 10 29 31ZM46 8L46 53" stroke="#b1a5ff" stroke-width="12.6" fill="none"/></g><g transform="translate(66 77) rotate(-4 27 29)" stroke-linejoin="round" stroke-linecap="round"><path d="M11 10L48 10L48 31L11 31ZM30 40L30 51M6 52L54 52" transform="translate(0 1.6)" stroke="#292664" stroke-width="17" fill="none"/><path d="M11 10L48 10L48 31L11 31ZM30 40L30 51M6 52L54 52" stroke="#292664" stroke-width="16" fill="none"/><path d="M11 10L48 10L48 31L11 31ZM30 40L30 51M6 52L54 52" stroke="#ffae70" stroke-width="12.6" fill="none"/><g transform="translate(24 10)"><ellipse cx="0" cy="0" rx="3.5" ry="4.9" fill="#fff" stroke="#282563" stroke-width="1"/><ellipse cx="1" cy="1" rx="1.8" ry="2.4" fill="#282563"/></g><g transform="translate(32 10)"><ellipse cx="0" cy="0" rx="3.5" ry="4.9" fill="#fff" stroke="#282563" stroke-width="1"/><ellipse cx="1" cy="1" rx="1.8" ry="2.4" fill="#282563"/></g><path d="M22 30q5 5 10 0" fill="none" stroke="#292664" stroke-width="1.8"/></g><g transform="translate(132 76) rotate(3 27 29)" stroke-linejoin="round" stroke-linecap="round"><path d="M5 13H32Q29 33 8 49M20 32L35 47M51 8V53" transform="translate(0 1.6)" stroke="#292664" stroke-width="17" fill="none"/><path d="M5 13H32Q29 33 8 49M20 32L35 47M51 8V53" stroke="#292664" stroke-width="16" fill="none"/><path d="M5 13H32Q29 33 8 49M20 32L35 47M51 8V53" stroke="#7fd59c" stroke-width="12.6" fill="none"/></g><g transform="translate(196 75) rotate(-3 27 29)" stroke-linejoin="round" stroke-linecap="round"><path d="M29 31C29 51 7 52 7 31C7 10 29 10 29 31ZM44 7V54M45 19H57M45 37H57" transform="translate(0 1.6)" stroke="#292664" stroke-width="17" fill="none"/><path d="M29 31C29 51 7 52 7 31C7 10 29 10 29 31ZM44 7V54M45 19H57M45 37H57" stroke="#292664" stroke-width="16" fill="none"/><path d="M29 31C29 51 7 52 7 31C7 10 29 10 29 31ZM44 7V54M45 19H57M45 37H57" stroke="#ff94b8" stroke-width="12.6" fill="none"/></g><g transform="translate(266 76) rotate(4 27 29)" stroke-linejoin="round" stroke-linecap="round"><path d="M4 34Q10 20 20 29T37 28" transform="translate(0 1.6)" stroke="#292664" stroke-width="17" fill="none"/><path d="M4 34Q10 20 20 29T37 28" stroke="#292664" stroke-width="16" fill="none"/><path d="M4 34Q10 20 20 29T37 28" stroke="#ffe16b" stroke-width="12.6" fill="none"/></g><path d="M237 11l7 12 13 2-9 10 1 14-12-6-11 6 2-14-10-10 14-2z" fill="#ffce66" stroke="#292664" stroke-width="2.2"/><path d="M275 43l6 25 5-8 10 6 4-5-11-6 7-4z" fill="#fff077" stroke="#292664" stroke-width="2.2" stroke-linejoin="round"/></svg></h1><span class="edition"><span aria-hidden="true">✦</span> 나라 편</span></div><div class="cover-art"><svg aria-hidden="true" focusable="false" class="feature-art" viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="landclip"><circle cx="205" cy="127" r="83"/></clipPath></defs>
+<path transform="translate(24 72) scale(1.25)" d="M0 18Q-4 8 8 7Q10-8 23 0Q31-5 38 6Q50 5 50 18Z" fill="#fffdf4" stroke="#262664" stroke-width="1.8"/><path transform="translate(330 30) scale(0.95)" d="M0 18Q-4 8 8 7Q10-8 23 0Q31-5 38 6Q50 5 50 18Z" fill="#fffdf4" stroke="#262664" stroke-width="1.8"/><path transform="translate(59 173) scale(0.85)" d="M0-20Q2-3 17-2Q5 1 1 20Q-2 4-17 1Q-4-3 0-20Z" fill="#ffe255" stroke="#262664" stroke-width="2.5"/><path transform="translate(347 130) scale(1.05)" d="M0-20Q2-3 17-2Q5 1 1 20Q-2 4-17 1Q-4-3 0-20Z" fill="#ffacd0" stroke="#262664" stroke-width="2.5"/><path transform="translate(303 46) scale(0.5)" d="M0-20Q2-3 17-2Q5 1 1 20Q-2 4-17 1Q-4-3 0-20Z" fill="#ffe255" stroke="#262664" stroke-width="2.5"/>
+<ellipse cx="220" cy="264" rx="110" ry="10" fill="#8178b8" opacity=".24"/>
+<g stroke="#262664" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+<g fill="none" stroke-width="9"><path d="M175 194Q182 216 161 230M226 198Q231 222 254 231M135 151Q100 170 81 153M281 136Q308 140 314 108"/></g>
+<g fill="#fffcdf"><path d="M93 156Q82 165 72 159Q59 155 60 143Q59 136 66 136Q61 120 69 122L79 136Q79 124 85 129L87 142Q98 136 98 144Z"/><path d="M305 111Q300 102 304 93Q307 87 311 95Q314 76 321 81L320 95Q330 79 335 86L327 100Q341 95 340 102Q332 117 319 119Z"/></g>
+<g fill="#ff928c"><path d="M163 221Q176 219 177 234L157 251Q135 260 119 249Q115 240 135 233L146 222Q152 216 157 225Z"/><path d="M244 224Q250 218 264 227Q282 224 292 238Q298 246 288 250L253 246Q240 241 240 233Z"/></g>
+<path d="M119 247Q137 258 159 245L176 230L180 238Q157 263 135 258Q123 257 119 253ZM240 236Q256 247 291 243L293 250Q269 256 242 244Z" fill="#fff9d8"/>
+<circle cx="205" cy="127" r="83" fill="#77d9f0"/>
+<g clip-path="url(#landclip)" fill="#90d376" stroke-width="2.4"><path d="M113 73Q139 63 151 69L160 81L185 76L191 86L176 96L178 109L162 120L162 139L150 138L139 121L118 121Z"/><path d="M160 144L179 149L188 161L176 176L169 193L163 190L164 173L154 160Z"/><path d="M204 43L221 37L253 46L250 60L234 60L227 74L210 75L209 62L196 64L191 52Z"/><path d="M263 82L290 77L300 159L277 158L257 149L250 132L258 120L250 110Z"/><path d="M230 183L249 171L265 179L263 194L237 202Z"/></g>
+<circle cx="205" cy="127" r="83" fill="none"/>
+<g fill="white"><ellipse cx="191" cy="123" rx="12" ry="18" transform="rotate(8 191 123)"/><ellipse cx="221" cy="121" rx="12" ry="18" transform="rotate(8 221 121)"/></g>
+<g fill="#262664" stroke="none"><ellipse cx="194" cy="128" rx="6" ry="9"/><ellipse cx="224" cy="126" rx="6" ry="9"/></g>
+<g fill="#ffa9bb" stroke="none"><ellipse cx="169" cy="143" rx="10" ry="5"/><ellipse cx="244" cy="137" rx="10" ry="5"/></g><path d="M194 147Q207 154 224 143Q221 166 209 164Q198 163 194 147Z" fill="#ff8f99"/>
+<g transform="rotate(-13 192 70)"><path d="M137 72Q135 27 178 23Q212 22 223 58L214 69Z" fill="#ffcd58"/><path d="M174 27Q161 46 166 67" fill="none" stroke-width="2.4"/><path d="M136 68Q183 57 223 57Q250 54 248 62Q244 70 215 73Q163 80 139 77Z" fill="#ffa4ba"/><ellipse cx="175" cy="22" rx="7" ry="4" fill="#ff909b"/></g>
+</g></svg></div></div><div class="ribbon" aria-hidden="true"><div class="ribbon-track"><div class="ribbon-run"><span>✿　 이거 제 이모지야~</span><b>✦</b><span>이모지로 만나는 세계</span><b>✦</b><span>✿　 이거 제 이모지야~</span><b>✦</b><span>이모지로 만나는 세계</span><b>✦</b><span>✿　 이거 제 이모지야~</span><b>✦</b><span>이모지로 만나는 세계</span><b>✦</b><span>✿　 이거 제 이모지야~</span><b>✦</b><span>이모지로 만나는 세계</span><b>✦</b><span>✿　 이거 제 이모지야~</span><b>✦</b><span>이모지로 만나는 세계</span><b>✦</b></div><div class="ribbon-run"><span>✿　 이거 제 이모지야~</span><b>✦</b><span>이모지로 만나는 세계</span><b>✦</b><span>✿　 이거 제 이모지야~</span><b>✦</b><span>이모지로 만나는 세계</span><b>✦</b><span>✿　 이거 제 이모지야~</span><b>✦</b><span>이모지로 만나는 세계</span><b>✦</b><span>✿　 이거 제 이모지야~</span><b>✦</b><span>이모지로 만나는 세계</span><b>✦</b><span>✿　 이거 제 이모지야~</span><b>✦</b><span>이모지로 만나는 세계</span><b>✦</b></div></div></div></div><section class="menu" aria-label="게임 모드 선택"><h2 class="mode-title">게임 모드 선택</h2><div class="modes"><button class="mode" onclick="go('setup1')"><div class="mode-head"><span class="mode-art" aria-hidden="true"><svg aria-hidden="true" focusable="false" class="" viewBox="0 0 60 62" xmlns="http://www.w3.org/2000/svg"><g stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"><path d="M7 23H20Q17 13 24 12Q33 11 30 23H41V34Q51 30 52 38Q53 46 41 43V54H29Q32 45 24 45Q17 45 19 54H7Z" fill="#a7db74"/><path d="M33 14L38 8M43 20L50 18" fill="none"/></g></svg></span><div><span class="mode-no">MODE 01</span><h2>이모지 자기소개 퀴즈</h2></div><span class="open-arrow" aria-hidden="true">↗</span></div><div class="mode-body"><p>나라가 이모지로 자기소개를 해요. 힌트는 <b>자연환경 → 생활·산업 → 상징</b> 순서로 하나씩!</p>
       <p>보기 4개 중에서 다 함께 골라요.</p>
-      <div class="example" style="background:var(--accent-soft)">"안녕~ ???입니다! 이거 제 이모지야~ ${E('🥶🌌')}"</div>
-    </button>
-    <button class="mode" onclick="go('setup2')">
-      <div class="icon emo">🎨</div>
-      <h2>이모지 캐치마인드</h2>
-      <p>출제자가 몰래 나라 카드를 보고, 이모지 최대 5개로 그 나라가 되어 자기소개!</p>
+      <div class="mode-foot"><div class="example" style="background:var(--accent-soft)">"안녕~ ???입니다! 이거 제 이모지야~ ${E('🥶🌌')}"</div>
+    </div></div></button><button class="mode" onclick="go('setup2')"><div class="mode-head"><span class="mode-art" aria-hidden="true"><svg aria-hidden="true" focusable="false" class="" viewBox="0 0 60 62" xmlns="http://www.w3.org/2000/svg"><g stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"><path d="M8 40Q4 24 18 16Q37 6 50 22Q61 35 48 40Q43 42 37 39Q30 37 28 43Q25 55 18 52Q11 50 8 40Z" fill="#ffc482"/><circle cx="16" cy="32" r="3" fill="#ff76af"/><circle cx="23" cy="23" r="3" fill="#7bd9cf"/><circle cx="33" cy="20" r="3" fill="#a18ae7"/><path d="M29 43L47 20L52 24L34 48L26 52Z" fill="#ff8da7"/><path d="M26 52L29 43L34 48Z" fill="#fff5d1"/></g></svg></span><div><span class="mode-no">MODE 02</span><h2>이모지 캐치마인드</h2></div><span class="open-arrow" aria-hidden="true">↗</span></div><div class="mode-body"><p>출제자가 몰래 나라 카드를 보고, 이모지 최대 5개로 그 나라가 되어 자기소개!</p>
       <p>반 전체가 함께 하거나, 팀별로 겨룰 수 있어요.</p>
-      <div class="example" style="background:var(--orange-soft)">국기 ${E('🚫')} 글자 ${E('🚫')} → 지리 특징으로만 승부!</div>
-    </button>
-  </div>
-  <div class="tip">💡 <b>수업 팁</b> · 게임을 시작하기 전에 다 함께 머리를 쓸어 넘기며 "안녕~ 이거 제 이모지야~ ${E('💁')}" 하고 시작해 보세요.
+      <div class="mode-foot"><div class="example" style="background:var(--orange-soft)">국기 ${E('🚫')} 글자 ${E('🚫')} → 지리 특징으로만 승부!</div>
+    </div></div></button></div></section><div class="tip">💡 <b>수업 팁</b> · 게임을 시작하기 전에 다 함께 머리를 쓸어 넘기며 "안녕~ 이거 제 이모지야~ ${E('💁')}" 하고 시작해 보세요.
   정답 후에는 꼭 <b>"왜 이 이모지야?"</b>를 묻고, 마지막엔 <b>"이 나라 사람들도 이 이모지를 고를까?"</b>로 고정관념을 함께 점검해요.</div>
 `;
 
@@ -357,7 +789,7 @@ VIEWS.quiz=()=>{
   ${topbar(`문제 ${Q.idx+1} / ${Q.deck.length}`)}
   <div class="stage">
     <div class="speaker">
-      <div class="mascot emo">💁</div>
+      <svg class="mascot town-host" aria-hidden="true" focusable="false" viewBox="0 0 420 282"><use href="#town-host"/></svg>
       <div class="bubble">안녕~ ${Q.revealed?`<span class="name pop">${q.n}</span>`:`<span class="name hidden">???</span>`}입니다!<small>이거 제 이모지야~</small></div>
     </div>
     <div class="hints">
@@ -471,7 +903,7 @@ VIEWS.catch=()=>{
   if(R.phase==='guess') return `${head}
     <div class="stage">
       <div class="speaker">
-        <div class="mascot emo">💁</div>
+        <svg class="mascot town-host" aria-hidden="true" focusable="false" viewBox="0 0 420 282"><use href="#town-host"/></svg>
         <div class="bubble">안녕~ <span class="name hidden">???</span>입니다!<small>이거 제 이모지야~</small></div>
       </div>
       <div class="big-emojis">${R.picks.map(e=>`<div class="cell"><div class="e emo pop">${e}</div></div>`).join('')}</div>
@@ -490,7 +922,7 @@ VIEWS.catch=()=>{
   return `${head}
     <div class="stage">
       <div class="speaker">
-        <div class="mascot emo">💁</div>
+        <svg class="mascot town-host" aria-hidden="true" focusable="false" viewBox="0 0 420 282"><use href="#town-host"/></svg>
         <div class="bubble">안녕~ <span class="name pop">${R.country}</span>입니다!<small>이거 제 이모지야~</small></div>
       </div>
       <div class="big-emojis">${R.picks.map(e=>`<div class="cell"><div class="e emo">${e}</div><span class="t">${CAT_OF[e]||'기타'}</span></div>`).join('')}</div>
